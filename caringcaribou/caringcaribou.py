@@ -135,7 +135,7 @@ def main():
             # Save the collected CAN messages to a file
             with open('can_messages.log', 'w') as file:
                 for message in can_messages:
-                    file.write(f'{0}: 0x{1:08x} {2}\n'.format(message.timestamp, message.arbitration_id, list_to_hex_str(message.data, " ")))
+                    file.write(f'{message.timestamp}: 0x{0:04x} {1}\n'.format(message.arbitration_id, list_to_hex_str(message.data, " ")))
 
     except AttributeError as e:
         pass
