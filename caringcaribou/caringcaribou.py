@@ -7,7 +7,8 @@ import errno
 from .utils import can_actions
 import traceback
 import pkg_resources
-import threading
+from caringcaribou.utils.can_listener import start_listener
+from caringcaribou.utils.common import list_to_hex_str
 
 
 VERSION = "1"
@@ -64,7 +65,6 @@ def available_modules():
     return mod_str
     
 
-
 def parse_arguments():
     """
     Argument parser for interface, module name and module arguments.
@@ -108,24 +108,6 @@ def load_module(module_name):
         return None
     
 
-def message_listener(bus, can_messages):
-    while True:
-        message = bus.recv()
-        can_messages.append(message)
-        time.sleep(0.01)  # Adjust the sleep duration as needed
-
-
-def start_listener(bus, can_messages):
-    # Create a thread for the message listener function
-    listener_thread = threading.Thread(target=message_listener, args=(bus, can_messages))
-    listener_thread.daemon = True  # Daemonize the thread so it automatically exits when the main program exits
-
-    # Start the thread
-    listener_thread.start()
-
-    return listener_thread
-
-
 def main():
     """Main execution handler"""
     # Parse and validate arguments
@@ -149,10 +131,11 @@ def main():
         # Load module
         cc_mod = load_module(args.module).load()
         cc_mod.module_main(args.module_args)
-        # Save the collected CAN messages to a file
-        with open('can_messages.log', 'w') as file:
-            for message in can_messages:
-                file.write(f'{message.timestamp}: {message.arbitration_id} {message.data}\n')
+        if args.dump == '1':
+            # Save the collected CAN messages to a file
+            with open('can_messages.log', 'w') as file:
+                for message in can_messages:
+                    file.write(f'{0}: 0x{1:08x} {2}\n'.format(message.timestamp, message.arbitration_id, list_to_hex_str(message.data, " ")))
 
     except AttributeError as e:
         pass
