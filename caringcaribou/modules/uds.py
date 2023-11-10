@@ -26,6 +26,7 @@ UDS_SERVICE_NAMES = {
     0x24: "READ_SCALING_DATA_BY_IDENTIFIER",
     0x27: "SECURITY_ACCESS",
     0x28: "COMMUNICATION_CONTROL",
+    0x29: "AUTHENTICATION"
     0x2A: "READ_DATA_BY_PERIODIC_IDENTIFIER",
     0x2C: "DYNAMICALLY_DEFINE_DATA_IDENTIFIER",
     0x2D: "DEFINE_PID_BY_MEMORY_ADDRESS",
@@ -539,6 +540,7 @@ def raw_send(arb_id_request, arb_id_response, service, session_type):
             response = uds.receive_response(Iso14229_1.P3_CLIENT)
             return response
 
+
 def padding_set(padding, no_padding):
     
     if no_padding == True:
@@ -924,6 +926,7 @@ def __dump_dids_wrapper(args):
     dump_dids(arb_id_request, arb_id_response, timeout, reporting, diagnostic, min_did, max_did,
               print_results)
 
+
 def report_print(text):
 
     if REPORT == 1:    
@@ -946,8 +949,6 @@ def report_print(text):
     else:
         print(text)
     
-
-
 
 def __auto_wrapper(args):
     """Wrapper used to initiate automated UDS scan"""

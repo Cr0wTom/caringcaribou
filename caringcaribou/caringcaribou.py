@@ -7,6 +7,7 @@ import errno
 from .utils import can_actions
 import traceback
 import pkg_resources
+import threading
 
 
 VERSION = "1"
@@ -80,6 +81,8 @@ def parse_arguments():
                         help="force channel, e.g. 'can1' or 'vcan0'")
     parser.add_argument("-b", dest="bitrate", default=None,
                         help="force bitrate, e.g. '250000' or '500000'")
+    parser.add_argument("-d", dest="dump", default='0',
+                        help="generation of CAN dump file for further evaluation after each scan")
     parser.add_argument("module",
                         help="Name of the module to run")
     parser.add_argument("module_args", metavar="...", nargs=argparse.REMAINDER,
@@ -103,6 +106,24 @@ def load_module(module_name):
     except KeyError as e:
         print("Load module failed: module {0} is not available".format(e))
         return None
+    
+
+def message_listener(bus, can_messages):
+    while True:
+        message = bus.recv()
+        can_messages.append(message)
+        time.sleep(0.01)  # Adjust the sleep duration as needed
+
+
+def start_listener(bus, can_messages):
+    # Create a thread for the message listener function
+    listener_thread = threading.Thread(target=message_listener, args=(bus, can_messages))
+    listener_thread.daemon = True  # Daemonize the thread so it automatically exits when the main program exits
+
+    # Start the thread
+    listener_thread.start()
+
+    return listener_thread
 
 
 def main():
@@ -116,11 +137,23 @@ def main():
         can_actions.DEFAULT_INTERFACE = args.interface
         can_actions.DEFAULT_CHANNEL = args.channel
         can_actions.DEFAULT_BITRATE = args.bitrate
-        
+        if args.dump == '1':
+            # Create a list to store received CAN messages
+            can_messages = []
+            # Create a CAN bus instance
+            bus = can.interface.Bus(channel=can_actions.DEFAULT_CHANNEL, bustype=can_actions.DEFAULT_INTERFACE)
+            listener_thread = start_listener(bus, can_messages)
+
+
     try:
         # Load module
         cc_mod = load_module(args.module).load()
         cc_mod.module_main(args.module_args)
+        # Save the collected CAN messages to a file
+        with open('can_messages.log', 'w') as file:
+            for message in can_messages:
+                file.write(f'{message.timestamp}: {message.arbitration_id} {message.data}\n')
+
     except AttributeError as e:
         pass
 
