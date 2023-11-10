@@ -513,6 +513,7 @@ def __sub_discovery_wrapper(args):
                                                          arb_id_response, diagnostic, service, timeout)
 
     service_name = UDS_SERVICE_NAMES.get(service, "Unknown service")
+    
     # Print results
     if len(found_subservices) == 0:
         print("\nNo Sub-Services were discovered for service {0:02x} - {1}.\n".format(service, service_name, end=' '))

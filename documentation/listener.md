@@ -2,9 +2,9 @@
 ````
 $ cc.py listener -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'listener'
 

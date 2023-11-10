@@ -1,12 +1,12 @@
 # XCP
 ```
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'xcp'
 
-usage: cc.py xcp [-h] {discovery,info,dump} ...
+usage: ccn.py xcp [-h] {discovery,info,dump} ...
 
 XCP module for CaringCaribou
 
@@ -17,20 +17,20 @@ optional arguments:
  -h, --help            show this help message and exit
 
 Example usage:
- cc.py xcp discovery
- cc.py xcp info 1000 1001
- cc.py xcp dump 0x3e8 0x3e9 0x1fffb000 0x4800 -f bootloader.hex
+ ccn.py xcp discovery
+ ccn.py xcp info 1000 1001
+ ccn.py xcp dump 0x3e8 0x3e9 0x1fffb000 0x4800 -f bootloader.hex
  ```
  
 ## Discovery
  ```
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'xcp'
 
-usage: cc.py xcp discovery [-h] [-min MIN] [-max MAX]
+usage: ccn.py xcp discovery [-h] [-min MIN] [-max MAX]
 
 optional arguments:
  -h, --help            show this help message and exit
@@ -41,13 +41,13 @@ optional arguments:
 ## Info
  
  ```
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'xcp'
 
-usage: cc.py xcp info [-h] src dst
+usage: ccn.py xcp info [-h] src dst
 
 positional arguments:
   src         arbitration ID to transmit from
@@ -60,13 +60,13 @@ optional arguments:
 ## Dump
  
  ```
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'xcp'
 
-usage: cc.py xcp dump [-h] [-f F] src dst start length
+usage: ccn.py xcp dump [-h] [-f F] src dst start length
 
 positional arguments:
   src         arbitration ID to transmit from

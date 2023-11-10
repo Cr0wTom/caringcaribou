@@ -8,18 +8,18 @@ The fuzzer module supports multiple fuzzing methods.
 
 The `random` and `mutate` modes both show which random seed is being used. The seed can be passed in an optional argument to these modes, in order to repeat the sequence of generated messages.
 
-As always, module help can be shown by adding the `-h` flag (as shown below). You can also show help for a specific fuzzing mode by specifying the mode followed by `-h`, e.g. `cc.py fuzzer random -h` or `cc.py fuzzer mutate -h`
+As always, module help can be shown by adding the `-h` flag (as shown below). You can also show help for a specific fuzzing mode by specifying the mode followed by `-h`, e.g. `ccn.py fuzzer random -h` or `ccn.py fuzzer mutate -h`
 
 ````
-$ cc.py fuzzer -h
+$ ccn.py fuzzer -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'fuzzer'
 
-usage: cc.py fuzzer [-h] {random,brute,mutate,replay,identify} ...
+usage: ccn.py fuzzer [-h] {random,brute,mutate,replay,identify} ...
 
 Fuzzing module for CaringCaribou
 
@@ -36,10 +36,10 @@ optional arguments:
 
 Example usage:
 
-cc.py fuzzer random
-cc.py fuzzer random -min 4 -seed 0xabc123 -f log.txt
-cc.py fuzzer brute 0x123 12ab..78
-cc.py fuzzer mutate 7f.. 12ab....
-cc.py fuzzer replay log.txt
-cc.py fuzzer identify log.txt
+ccn.py fuzzer random
+ccn.py fuzzer random -min 4 -seed 0xabc123 -f log.txt
+ccn.py fuzzer brute 0x123 12ab..78
+ccn.py fuzzer mutate 7f.. 12ab....
+ccn.py fuzzer replay log.txt
+ccn.py fuzzer identify log.txt
 ````

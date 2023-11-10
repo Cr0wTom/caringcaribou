@@ -31,21 +31,21 @@ Install the tool:
 
 The best way to understand how to use Caring Caribou is to look at the help screen:
 
-    cc.py --help
+    ccn.py --help
 
-This will list all available modules at the bottom of the output. Help for specific modules works the same way. For example, the help screen for the `send` module is shown by running
+This will list all available modules at the bottom of the output. Help for specific modules works the same way. For example, the help screen for the `uds` module is shown by running
 
-    cc.py send --help
+    ccn.py uds --help
 
 The module help always includes some usage examples. If the module has multiple sub functions, these have similar help screens as well:
 
-    cc.py send message -h
-    cc.py send file -h
+    ccn.py uds discovery -h
+    ccn.py uds auto -h
 
-More detailed usage information is available [in the documentation on usage](documentation/howtouse.md).
+More detailed usage information is available [in the documentation on usage](documentation/README.md).
 
 ## Features and Architecture
-Caring Caribou Next is based on a main entry point, `cc.py`, which runs the show. This enables an easy drop-in architecture for new modules, which are located in the `caringcaribou/modules` folder.
+Caring Caribou Next is based on a main entry point, `ccn.py`, which runs the show. This enables an easy drop-in architecture for new modules, which are located in the `caringcaribou/modules` folder.
 
 The `caringcaribou/utils` folder contains various higher level CAN protocol implementations and shared functions, meant to be used by modules.
 

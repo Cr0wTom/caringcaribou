@@ -11,18 +11,18 @@ Supported modes:
 * seed_randomness_fuzzer - ECUReset method fuzzing for seed randomness evaluation
 * delay_fuzzer - delay fuzzing for targets with weak randomness implemented, to match acquired seed/key pair to the delay in which the seed can be requested
 
-As always, module help can be shown by adding the `-h` flag (as shown below). You can also show help for a specific mode by specifying the mode followed by `-h`, e.g. `cc.py uds_fuzz seed_randomness_fuzzer -h` or `cc.py uds_fuzz delay_fuzzer -h`
+As always, module help can be shown by adding the `-h` flag (as shown below). You can also show help for a specific mode by specifying the mode followed by `-h`, e.g. `ccn.py uds_fuzz seed_randomness_fuzzer -h` or `ccn.py uds_fuzz delay_fuzzer -h`
 
 ```
-$ cc.py uds_fuzz -h
+$ ccn.py uds_fuzz -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'uds_fuzz'
 
-usage: cc.py uds_fuzz [-h] {delay_fuzzer,seed_randomness_fuzzer} ...
+usage: ccn.py uds_fuzz [-h] {delay_fuzzer,seed_randomness_fuzzer} ...
 
 UDS seed randomness fuzzer and tester module for CaringCaribou
 
@@ -33,8 +33,8 @@ optional arguments:
   -h, --help            show this help message and exit
 
 Example usage:
-  cc.py uds_fuzz seed_randomness_fuzzer 100311022701 0x733 0x633 -d 4 -r 1 -id 2 -m 0
-  cc.py uds_fuzz delay_fuzzer 100311022701 0x03 0x733 0x633
+  ccn.py uds_fuzz seed_randomness_fuzzer 100311022701 0x733 0x633 -d 4 -r 1 -id 2 -m 0
+  ccn.py uds_fuzz delay_fuzzer 100311022701 0x03 0x733 0x633
 ```
 
 ## Seed Randomness Fuzzer
@@ -43,15 +43,15 @@ Requests a security seed after a Hard ECUReset, using the supplied request seque
 In case that duplicate seeds are found by the tool, it means that the ECU is potentially  vulnerable and uses weak random number generation seeded by the system timer.
 
 ```
-$ cc.py uds_fuzz seed_randomness_fuzzer -h
+$ ccn.py uds_fuzz seed_randomness_fuzzer -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'uds_fuzz'
 
-usage: cc.py uds_fuzz seed_randomness_fuzzer [-h] [-t ITERATIONS] [-r RTYPE] [-id RTYPE] [-m RMETHOD] [-d D]
+usage: ccn.py uds_fuzz seed_randomness_fuzzer [-h] [-t ITERATIONS] [-r RTYPE] [-id RTYPE] [-m RMETHOD] [-d D]
                                              stype src dst
 
 positional arguments:
@@ -89,15 +89,15 @@ That way the exact delay needed to request the user specified seed can be matche
 In that case, the user can access the security access service of vulnerable ECUs, with just one seed/key pair (it can be obtained in several ways) and no access to the secret key needed to generate the key from the seed.
 
 ```
-$ cc.py uds_fuzz delay_fuzzer -h
+$ ccn.py uds_fuzz delay_fuzzer -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'uds_fuzz'
 
-usage: cc.py uds_fuzz delay_fuzzer [-h] [-r RTYPE] [-d D] stype target src dst
+usage: ccn.py uds_fuzz delay_fuzzer [-h] [-r RTYPE] [-d D] stype target src dst
 
 positional arguments:
   stype                 Describe the session sequence followed by the target ECU.e.g. if the following sequence is

@@ -11,7 +11,7 @@ from caringcaribou.utils.can_listener import start_listener
 from caringcaribou.utils.common import list_to_hex_str
 
 
-VERSION = "1"
+VERSION = "1.1"
 
 
 def show_script_header():
@@ -20,7 +20,7 @@ def show_script_header():
 {0}
 CARING CARIBOU NEXT v{1}
 {0}
-""".format("-"*(21 + len(VERSION)), VERSION))
+""".format("-"*(92 + len(VERSION)), VERSION))
 
 
 def fancy_header():
@@ -39,7 +39,7 @@ CARING CARIBOU NEXT v{1}
             ||     ||           \______| \______|   |__| \__| |_______/__/ \__\     |__|    
 {0}
 
-""".format("-"*(21 + len(VERSION)), VERSION)
+""".format("-"*(92 + len(VERSION)), VERSION)
 
 
 def available_modules_dict():
@@ -82,7 +82,8 @@ def parse_arguments():
     parser.add_argument("-b", dest="bitrate", default=None,
                         help="force bitrate, e.g. '250000' or '500000'")
     parser.add_argument("-d", dest="dump", default='0',
-                        help="generation of CAN dump file for further evaluation after each scan")
+                        help="generation of CAN dump file for further evaluation after each scan\n"
+                        "Set to 1 to start dumping to file can_messages.log. (default: 0)\n")
     parser.add_argument("module",
                         help="Name of the module to run")
     parser.add_argument("module_args", metavar="...", nargs=argparse.REMAINDER,
@@ -119,10 +120,11 @@ def main():
         can_actions.DEFAULT_INTERFACE = args.interface
         can_actions.DEFAULT_CHANNEL = args.channel
         can_actions.DEFAULT_BITRATE = args.bitrate
+        
         if args.dump == '1':
             # Create a list to store received CAN messages
             can_messages = []
-            # Create a CAN bus instance
+            # Create a CAN bus instance for the listener
             bus = can.interface.Bus(channel=can_actions.DEFAULT_CHANNEL, bustype=can_actions.DEFAULT_INTERFACE)
             listener_thread = start_listener(bus, can_messages)
 
@@ -135,7 +137,7 @@ def main():
             # Save the collected CAN messages to a file
             with open('can_messages.log', 'w') as file:
                 for message in can_messages:
-                    file.write(f'{message.timestamp}: 0x{0:04x} {1}\n'.format(message.arbitration_id, list_to_hex_str(message.data, " ")))
+                    file.write('{0}: 0x{1:04x} {2}\n'.format(message.timestamp, message.arbitration_id, list_to_hex_str(message.data, " ")))
 
     except AttributeError as e:
         pass

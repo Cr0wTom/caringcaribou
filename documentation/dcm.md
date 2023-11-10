@@ -1,14 +1,14 @@
 # DCM
 ```
-$ cc.py dcm -h
+$ ccn.py dcm -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'dcm'
 
-usage: cc.py dcm [-h] {discovery,services,subfunc,dtc} ...
+usage: ccn.py dcm [-h] {discovery,services,subfunc,dtc} ...
 
 Diagnostics module for CaringCaribou
 
@@ -19,23 +19,23 @@ optional arguments:
   -h, --help            show this help message and exit
 
 Example usage:
-  cc.py dcm discovery
-  cc.py dcm services 0x733 0x633
-  cc.py dcm subfunc 0x733 0x633 0x22 2 3
-  cc.py dcm dtc 0x7df 0x7e8
+  ccn.py dcm discovery
+  ccn.py dcm services 0x733 0x633
+  ccn.py dcm subfunc 0x733 0x633 0x22 2 3
+  ccn.py dcm dtc 0x7df 0x7e8
  ```
 
 ## Discovery
 ```
-$ cc.py dcm discovery -h
+$ ccn.py dcm discovery -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'dcm'
 
-usage: cc.py dcm discovery [-h] [-min MIN] [-max MAX] [-nostop]
+usage: ccn.py dcm discovery [-h] [-min MIN] [-max MAX] [-nostop]
                            [-blacklist B [B ...]] [-autoblacklist N]
 
 optional arguments:
@@ -50,15 +50,15 @@ optional arguments:
 
 ## Services
 ````
-$ cc.py dcm services -h
+$ ccn.py dcm services -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'dcm'
 
-usage: cc.py dcm services [-h] src dst
+usage: ccn.py dcm services [-h] src dst
 
 positional arguments:
   src         arbitration ID to transmit from
@@ -70,15 +70,15 @@ optional arguments:
 
 ## Subfunc
 ````
-$ cc.py dcm subfunc -h
+$ ccn.py dcm subfunc -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'dcm'
 
-usage: cc.py dcm subfunc [-h] [-show] src dst service i [i ...]
+usage: ccn.py dcm subfunc [-h] [-show] src dst service i [i ...]
 
 positional arguments:
   src         arbitration ID to transmit from
@@ -93,15 +93,15 @@ optional arguments:
 
 ## DTC
 ````
-$ cc.py dcm dtc -h
+$ ccn.py dcm dtc -h
 
--------------------
-CARING CARIBOU v0.x
--------------------
+-------------------------
+CARING CARIBOU NEXT v0.x
+-------------------------
 
 Loaded module 'dcm'
 
-usage: cc.py dcm dtc [-h] [-clear] src dst
+usage: ccn.py dcm dtc [-h] [-clear] src dst
 
 positional arguments:
   src         arbitration ID to transmit from
