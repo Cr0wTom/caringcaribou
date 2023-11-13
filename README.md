@@ -13,7 +13,7 @@ A fork of a friendly automotive security exploration tool.
 ## Rationale
 This work was initiated as part of the research project HEAVENS (HEAling Vulnerabilities to ENhance Software Security and Safety), and was forked to act as a quick way to perform changes for personal use, and for people that are intrested on those changes.
 
-While caringcaribou is not perfect, it can act as a quick evaluation utility, which can help with exploration of a target ECU over several target networks/interfaces. This project is not meant to be a complete one button solution, but a tool that can give researchers a quick and easy head start into the path of ECU exploration.
+While caringcaribounext is not perfect, it can act as a quick evaluation utility, which can help with exploration of a target ECU over several target networks/interfaces. This project is not meant to be a complete one button solution, but a tool that can give researchers a quick and easy head start into the path of ECU exploration.
 
 
 ## Documentation
@@ -27,7 +27,7 @@ While caringcaribou is not perfect, it can act as a quick evaluation utility, wh
 ## Get started
 Install the tool:
 
-    python setup.py install
+    pip install .
 
 The best way to understand how to use Caring Caribou is to look at the help screen:
 
@@ -45,8 +45,8 @@ The module help always includes some usage examples. If the module has multiple 
 More detailed usage information is available [in the documentation on usage](documentation/README.md).
 
 ## Features and Architecture
-Caring Caribou Next is based on a main entry point, `ccn.py`, which runs the show. This enables an easy drop-in architecture for new modules, which are located in the `caringcaribou/modules` folder.
+Caring Caribou Next is based on a main entry point, `ccn.py`, which runs the show. This enables an easy drop-in architecture for new modules, which are located in the `caringcaribounext/modules` folder.
 
-The `caringcaribou/utils` folder contains various higher level CAN protocol implementations and shared functions, meant to be used by modules.
+The `caringcaribounext/utils` folder contains various higher level CAN protocol implementations and shared functions, meant to be used by modules.
 
-The `caringcaribou/tests` folder contains automated test suites and `/documentation` stores documentation files (modules are also documented here).
+The `caringcaribounext/tests` folder contains automated test suites and `/documentation` stores documentation files (modules are also documented here).
