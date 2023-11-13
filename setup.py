@@ -20,7 +20,7 @@ setup(
     name="caringcaribounext",
     version=version,
     author="Thomas Sermpinis",
-    # author_email="TBD",
+    author_email="thomas.sermpinis@cr0wsplace.com",
     description="A fork of a friendly automotive security exploration tool",
     long_description=__doc__,
     keywords=["automotive", "security", "CAN", "automotive protocols", "fuzzing"],
