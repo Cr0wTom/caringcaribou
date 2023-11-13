@@ -47,7 +47,7 @@ CARING CARIBOU NEXT v{1}
 
 def available_modules_dict():
     available_modules = dict()
-    for entry_point in pkg_resources.iter_entry_points("caringcaribou.modules"):
+    for entry_point in pkg_resources.iter_entry_points("caringcaribounext.modules"):
         nicename = str(entry_point).split("=")[0].strip()
         available_modules[nicename] = entry_point
     return available_modules
@@ -56,7 +56,7 @@ def available_modules_dict():
 def available_modules():
     """
     Get a string showing available CaringCaribouNext modules.
-    Modules are listed in setup.py: entry_points['caringcaribou.modules']
+    Modules are listed in setup.py: entry_points['caringcaribounext.modules']
 
     :return: A string listing available modules
     :rtype: str

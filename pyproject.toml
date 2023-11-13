@@ -1,6 +1,6 @@
 [project]
-name = "caringcaribou"
-authors = [{name = "Kasper Karlsson"}]
+name = "caringcaribounext"
+authors = [{name = "Thomas Sermpinis"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
