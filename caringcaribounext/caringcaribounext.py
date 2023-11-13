@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # Released under GNU General Public License v3
+# https://github.com/Cr0wTom/caringcaribounext
+# Original repo released under GNU General Public License v3
 # https://github.com/CaringCaribou/caringcaribou
+
 import argparse
 import can
 import errno
 from .utils import can_actions
 import traceback
 import pkg_resources
-from caringcaribou.utils.can_listener import start_listener
-from caringcaribou.utils.common import list_to_hex_str
+from caringcaribounext.utils.can_listener import start_listener
+from caringcaribounext.utils.common import list_to_hex_str
 
 
 VERSION = "1.1"

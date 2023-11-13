@@ -26,8 +26,8 @@ Steps to add this module to CaringCaribouNext and run it:
 from __future__ import print_function
 import argparse
 import time
-from caringcaribou.utils.can_actions import CanActions
-from caringcaribou.utils.common import list_to_hex_str, parse_int_dec_or_hex
+from caringcaribounext.utils.can_actions import CanActions
+from caringcaribounext.utils.common import list_to_hex_str, parse_int_dec_or_hex
 
 
 def do_stuff(my_arbitration_id):

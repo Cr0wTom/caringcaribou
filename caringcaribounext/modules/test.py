@@ -1,6 +1,6 @@
 from __future__ import print_function
-from caringcaribou.utils.can_actions import DEFAULT_INTERFACE
-import caringcaribou.tests
+from caringcaribounext.utils.can_actions import DEFAULT_INTERFACE
+import caringcaribounext.tests
 import unittest
 
 
@@ -15,5 +15,5 @@ def module_main(_):
     """Runs all Caring Caribou Next unit tests"""
     print_interface_header()
     # Run tests
-    test_suite = unittest.TestLoader().loadTestsFromModule(caringcaribou.tests)
+    test_suite = unittest.TestLoader().loadTestsFromModule(caringcaribounext.tests)
     unittest.TextTestRunner(verbosity=2).run(test_suite)

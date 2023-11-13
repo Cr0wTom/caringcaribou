@@ -1,5 +1,5 @@
-from caringcaribou.utils.can_actions import DEFAULT_INTERFACE, DEFAULT_CHANNEL, DEFAULT_BITRATE
-from caringcaribou.utils.constants import ARBITRATION_ID_MAX_EXTENDED, ARBITRATION_ID_MAX
+from caringcaribounext.utils.can_actions import DEFAULT_INTERFACE, DEFAULT_CHANNEL, DEFAULT_BITRATE
+from caringcaribounext.utils.constants import ARBITRATION_ID_MAX_EXTENDED, ARBITRATION_ID_MAX
 import can
 import datetime
 import time

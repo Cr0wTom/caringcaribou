@@ -1,5 +1,5 @@
 from __future__ import print_function
-from caringcaribou.utils.can_actions import CanActions
+from caringcaribounext.utils.can_actions import CanActions
 from sys import stdout
 from collections import Counter
 import argparse

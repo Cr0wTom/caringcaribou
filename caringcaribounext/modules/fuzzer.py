@@ -3,9 +3,9 @@ from sys import version_info, stdout
 import argparse
 import random
 from itertools import product
-from caringcaribou.utils.can_actions import CanActions
-from caringcaribou.utils.common import hex_str_to_nibble_list, int_from_byte_list, list_to_hex_str, parse_int_dec_or_hex
-from caringcaribou.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MIN, BYTE_MAX, BYTE_MIN
+from caringcaribounext.utils.can_actions import CanActions
+from caringcaribounext.utils.common import hex_str_to_nibble_list, int_from_byte_list, list_to_hex_str, parse_int_dec_or_hex
+from caringcaribounext.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MIN, BYTE_MAX, BYTE_MIN
 from time import sleep
 
 

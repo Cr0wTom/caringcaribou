@@ -1,7 +1,7 @@
 from __future__ import print_function
-from caringcaribou.utils.common import list_to_hex_str, parse_int_dec_or_hex, str_to_int_list
-from caringcaribou.utils.iso14229_1 import Iso14229_1, ServiceID
-from caringcaribou.utils.iso15765_2 import IsoTp
+from caringcaribounext.utils.common import list_to_hex_str, parse_int_dec_or_hex, str_to_int_list
+from caringcaribounext.utils.iso14229_1 import Iso14229_1, ServiceID
+from caringcaribounext.utils.iso15765_2 import IsoTp
 from sys import stdout
 import argparse
 import time

@@ -1,6 +1,6 @@
-from caringcaribou.utils.can_actions import CanActions
-from caringcaribou.utils.common import list_to_hex_str, parse_int_dec_or_hex, str_to_int_list
-from caringcaribou.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MAX_EXTENDED
+from caringcaribounext.utils.can_actions import CanActions
+from caringcaribounext.utils.common import list_to_hex_str, parse_int_dec_or_hex, str_to_int_list
+from caringcaribounext.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MAX_EXTENDED
 from time import sleep
 from sys import exit
 import argparse

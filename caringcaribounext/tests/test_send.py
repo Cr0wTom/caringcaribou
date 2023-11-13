@@ -1,4 +1,4 @@
-from caringcaribou.modules import send
+from caringcaribounext.modules import send
 import unittest
 
 

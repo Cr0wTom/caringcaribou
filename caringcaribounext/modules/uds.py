@@ -1,11 +1,11 @@
 from __future__ import print_function
-from caringcaribou.utils.can_actions import auto_blacklist
-from caringcaribou.utils.common import list_to_hex_str, parse_int_dec_or_hex
-from caringcaribou.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MAX_EXTENDED
-from caringcaribou.utils.constants import ARBITRATION_ID_MIN
-from caringcaribou.utils.iso15765_2 import IsoTp
-from caringcaribou.utils.iso14229_1 import Constants, Iso14229_1, NegativeResponseCodes, Services, ServiceID
-from caringcaribou.modules.uds_fuzz import seed_randomness_fuzzer, find_duplicates
+from caringcaribounext.utils.can_actions import auto_blacklist
+from caringcaribounext.utils.common import list_to_hex_str, parse_int_dec_or_hex
+from caringcaribounext.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MAX_EXTENDED
+from caringcaribounext.utils.constants import ARBITRATION_ID_MIN
+from caringcaribounext.utils.iso15765_2 import IsoTp
+from caringcaribounext.utils.iso14229_1 import Constants, Iso14229_1, NegativeResponseCodes, Services, ServiceID
+from caringcaribounext.modules.uds_fuzz import seed_randomness_fuzzer, find_duplicates
 from sys import stdout, version_info, stderr
 import argparse
 import datetime
@@ -525,6 +525,8 @@ def __sub_discovery_wrapper(args):
 
 
 def raw_send(arb_id_request, arb_id_response, service, session_type):
+    """Helper function to initate raw message send when needed, instead of extended_session"""
+
     with IsoTp(arb_id_request=arb_id_request,
                arb_id_response=arb_id_response) as tp:
         # Setup filter for incoming messages
@@ -543,7 +545,7 @@ def raw_send(arb_id_request, arb_id_response, service, session_type):
 
 
 def padding_set(padding, no_padding):
-    
+    """Helper function to set the needed padding for the target scan/message"""
     if no_padding == True:
         NP[0] = 1
 
@@ -929,9 +931,13 @@ def __dump_dids_wrapper(args):
 
 
 def report_print(text):
+    """Helper function to create a .txt report with the contents of the applicable scan"""
 
-    if REPORT == 1:    
+    # Check if report is requested
+    if REPORT == 1:   
+        # print the supplied text 
         print(text)
+        # write text to applicable file
         if DOCUMENT == 0:
             report = open("ccn_uds_auto_report.txt", "a")
             report.write(text)
@@ -971,6 +977,7 @@ def __auto_wrapper(args):
 
     padding_set(padding, no_padding)
 
+    # set reporting functionality and create file
     if reporting == 1:
         global REPORT
         REPORT = 1
@@ -981,6 +988,7 @@ def __auto_wrapper(args):
         f.close()
 
     try:
+        # Perform UDS discovery
         arb_id_pairs = uds_discovery(min_id, max_id, blacklist,
                                      auto_blacklist_duration,
                                      delay, verify, print_results)
@@ -1024,6 +1032,7 @@ def __auto_wrapper(args):
 
                 print("\nEnumerating Services:\n")
 
+                # Enumerate services
                 found_services = service_discovery(client_id, server_id, timeout)
                 found_subservices = []
 
@@ -1037,12 +1046,14 @@ def __auto_wrapper(args):
 
                 report_print("\n")
 
+                # Enumerate service 0x22 READ_DATA_BY_IDENTIFIER
                 if ServiceID.READ_DATA_BY_IDENTIFIER in found_services:
                     try:
                         dump_dids(client_id, server_id, timeout, reporting, min_did, max_did, print_results)
                     except KeyboardInterrupt:
                         print("Current test interrupted by user.")
 
+                # Enumerate service 0x10 DIAGNOSTIC_SESSION_CONTROL
                 if ServiceID.DIAGNOSTIC_SESSION_CONTROL in found_services:
                     
                     try:
@@ -1090,6 +1101,7 @@ def __auto_wrapper(args):
                     except KeyboardInterrupt:
                         print("Current test interrupted by user.")
 
+                # Enumerate service 0x31 ROUTINE_CONTROL
                 if ServiceID.ROUTINE_CONTROL in found_services:
                     try:
                         for subservice_id in found_subservices:
@@ -1099,6 +1111,7 @@ def __auto_wrapper(args):
                     except KeyboardInterrupt:
                         print("Current test interrupted by user.")
 
+                # Enumerate service 0x23 WRITE_DATA_BY_IDENTIFIER
                 if ServiceID.WRITE_DATA_BY_IDENTIFIER in found_services:
                     try:
                         for subservice_id in found_subservices:
@@ -1113,6 +1126,7 @@ def __auto_wrapper(args):
                     except KeyboardInterrupt:
                         print("Current test interrupted by user.")
 
+                # Enumerate service 0x11 ECU_RESET
                 if ServiceID.ECU_RESET in found_services:
                     
                     try:
@@ -1165,6 +1179,7 @@ def __auto_wrapper(args):
                     except KeyboardInterrupt:
                         print("Current test interrupted by user.")
 
+                # Enumerate service 0x27 SECURITY_ACCESS
                 if ServiceID.SECURITY_ACCESS in found_services:
 
                     try:
@@ -1204,7 +1219,7 @@ def __auto_wrapper(args):
                                 counter += 1
                             report_print(table_line_sec)
 
-                            #Seed Randomness Evaluation
+                            # Evaluate the Seed Randomness 
                             if input("Do you want to perform seed randomness evaluation with uds_fuzz module? (y/n)") == "y":
                                 for counter in range(len(found_subsec)):
                                     diag = found_subdiag[counter]
@@ -1345,7 +1360,7 @@ def dump_dids(arb_id_request, arb_id_response, timeout, reporting, diagnostic,
 
 
 def __dump_mem_wrapper(args):
-    """Wrapper used to initiate data identifier dump"""
+    """Wrapper used to initiate data memory dump"""
     arb_id_request = args.src
     arb_id_response = args.dst
     timeout = args.timeout
@@ -1369,33 +1384,9 @@ def dump_memory(arb_id_request, arb_id_response, timeout,
                 start_addr=MEM_START_ADDR, mem_length=MEM_LEN, mem_size=MEM_SIZE, address_byte_size=ADDR_BYTE_SIZE,
                 memory_length_byte_size=MEM_LEN_BYTE_SIZE, session_type=3, print_results=True):
     """
-    Sends read data by identifier (DID) messages to 'arb_id_request'.
-    Returns a list of positive responses received from 'arb_id_response' within
+    Sends read memory by address messages to 'arb_id_request'.
+    Returns a memory dump received from 'arb_id_response' within
     'timeout' seconds or an empty list if no positive responses were received.
-    :param arb_id_request: arbitration ID for requests
-    :param arb_id_response: arbitration ID for responses
-    :param timeout: seconds to wait for response before timeout, or None
-                    for default UDS timeout
-    :param start_addr: starting address to read
-    :param mem_length: maximum device identifier to read
-    :param mem_size: number of bytes to read from the controller
-    :param address_byte_size: number of bytes of the memory address parameter
-    :param memory_length_byte_size: number of bytes of the memory length parameter
-    :param session_type: session level
-    :param print_results: whether progress should be printed to stdout
-    :type address_byte_size: int
-    :type memory_length_byte_size: int
-    :type arb_id_request: int
-    :type arb_id_response: int
-    :type timeout: float or None
-    :type start_addr: int
-    :type mem_length: int
-    :type mem_size: int
-    :type session_type: int
-    :type print_results: bool
-    :return: list of tuples containing memory address and response bytes on success,
-             empty list if no responses
-    :rtype [(int, [int])] or []
     """
     _max_memory_space = (2 ** (8 * address_byte_size) - 1)
     # Sanity checks
@@ -1477,23 +1468,6 @@ def write_dids(diagnostic, arb_id_request, arb_id_response, timeout, reporting,
     Sends write data by identifier (DID) messages to 'arb_id_request'.
     Returns a list of positive responses received from 'arb_id_response' within
     'timeout' seconds or an empty list if no positive responses were received.
-
-    :param arb_id_request: arbitration ID for requests
-    :param arb_id_response: arbitration ID for responses
-    :param timeout: seconds to wait for response before timeout, or None
-                    for default UDS timeout
-    :param min_did: minimum device identifier to read
-    :param max_did: maximum device identifier to read
-    :param print_results: whether progress should be printed to stdout
-    :type arb_id_request: int
-    :type arb_id_response: int
-    :type timeout: float or None
-    :type min_did: int
-    :type max_did: int
-    :type print_results: bool
-    :return: list of tuples containing DID and response bytes on success,
-             empty list if no responses
-    :rtype [(int, [int])] or []
     """
     try:
         # Sanity checks
