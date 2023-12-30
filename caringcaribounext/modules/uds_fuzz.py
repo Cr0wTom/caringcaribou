@@ -5,6 +5,7 @@ from caringcaribounext.utils.iso15765_2 import IsoTp
 from sys import stdout
 import argparse
 import time
+import RPi.GPIO as GPIO
 
 # Number of seconds to wait between messages
 DELAY_SECSEED_RESET = 0.011
@@ -47,6 +48,15 @@ def print_negative_response(response):
     nrc_description = NRC_NAMES.get(nrc, "Unknown NRC value")
     print("Received negative response code (NRC) 0x{0:02x}: {1}"
           .format(nrc, nrc_description))
+    
+def reset(reset_type, gpio, arb_id_request, arb_id_response):
+    if reset_type == 0:
+        GPIO.output(int(gpio), GPIO.LOW)
+        time.sleep(0.1)
+        GPIO.output(int(gpio), GPIO.HIGH)
+    else:
+        raw_send(arb_id_request, arb_id_response, ServiceID.ECU_RESET, reset_type)
+
 
 def __seed_randomness_fuzzer_wrapper(args):
     """Wrapper used to initiate a seed randomness fuzz"""
@@ -60,8 +70,9 @@ def __seed_randomness_fuzzer_wrapper(args):
     inter = args.inter_delay
     padding = args.padding
     no_padding = args.no_padding
+    gpio = args.gpio
 
-    seed_list = seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, session_type, iterations, reset_delay, reset_method, inter, padding, no_padding)
+    seed_list = seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, gpio, session_type, iterations, reset_delay, reset_method, inter, padding, no_padding)
 
     # Print captured seeds and found duplicates
     if len(seed_list) > 0:
@@ -72,7 +83,7 @@ def __seed_randomness_fuzzer_wrapper(args):
         print("\nDuplicates found: \n", find_duplicates(seed_list))
 
 
-def seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, session_type, iterations, reset_delay, reset_method, inter, padding, no_padding):
+def seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, gpio, session_type, iterations, reset_delay, reset_method, inter, padding, no_padding):
     """Wrapper used to initiate security randomness fuzzer"""
     
     padding_set(padding, no_padding)
@@ -81,13 +92,16 @@ def seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, session_
 
     try:
 
+        if reset_type == 0:
+            GPIO.setmode(GPIO.BOARD)
+
         # Issue first reset with the supplied delay time
         print("Security seed dump started. Press Ctrl+C if you need to stop.\n")
-        raw_send(arb_id_request, arb_id_response, ServiceID.ECU_RESET, reset_type)
+        reset(reset_type, gpio, arb_id_request, arb_id_response)
         time.sleep(reset_delay)
         for i in range(iterations):
             if reset_method == 1 and i > 0:
-                raw_send(arb_id_request, arb_id_response, ServiceID.ECU_RESET, reset_type)
+                reset(reset_type, gpio, arb_id_request, arb_id_response)
                 time.sleep(reset_delay)
 
             for y in range(0, len(session_type), 4):
@@ -134,6 +148,8 @@ def seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, session_
 
     except KeyboardInterrupt:
         print("Interrupted by user.")
+        if reset_type == 0:
+            GPIO.cleanup()
     except ValueError as e:
         print(e)
         return
@@ -349,9 +365,9 @@ def __parse_args(args):
                                           type=parse_int_dec_or_hex,
                                           help="Enable reset between security seed "
                                                "requests. Valid RTYPE integers are: "
-                                               "1=hardReset, 2=key off/on, 3=softReset, "
-                                               "4=enable rapid power shutdown, "
-                                               "5=disable rapid power shutdown. "
+                                               "0=External Relay, 1=ECUReset hardReset, 2=ECUReset key off/on, 3=ECUReset softReset, "
+                                               "4=ECUReset enable rapid power shutdown, "
+                                               "5=ECUReset disable rapid power shutdown. "
                                                "This attack is based on hard ECUReset (1) "
                                                "as it targets seed randomness based on "
                                                "the system clock. (default: hardReset)")
@@ -359,6 +375,10 @@ def __parse_args(args):
                                           type=float,
                                           help="Intermediate delay between messages:"
                                                "(default: 0.1)")
+    parser_randomness_fuzzer.add_argument("-g", "--gpio", metavar="GPIO", default=7,
+                                          type=parse_int_dec_or_hex,
+                                          help="GPIO Pin in a Raspberry Pi configuration, which will be used in case of -r 0 option, where reset type is set as an external physical relay."
+                                               "(default: 7)")
     parser_randomness_fuzzer.add_argument("-m", "--reset_method", metavar="RMETHOD", default=1,
                                           type=parse_int_dec_or_hex,
                                           help="The method that the ECUReset will happen: "
