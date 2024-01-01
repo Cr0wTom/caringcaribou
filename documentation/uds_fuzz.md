@@ -49,36 +49,41 @@ $ ccn.py uds_fuzz seed_randomness_fuzzer -h
 CARING CARIBOU NEXT v0.x
 -------------------------
 
-Loaded module 'uds_fuzz'
+Loading module 'uds_fuzz'
 
-usage: ccn.py uds_fuzz seed_randomness_fuzzer [-h] [-t ITERATIONS] [-r RTYPE] [-id RTYPE] [-m RMETHOD] [-d D]
-                                             stype src dst
+usage: ccn.py uds_fuzz seed_randomness_fuzzer [-h] [-t ITERATIONS] [-r RTYPE] [-id RTYPE] [-g GPIO] [-m RMETHOD] [-d D]
+                                              [-p P] [-np]
+                                              stype src dst
 
 positional arguments:
-  stype                 Describe the session sequence followed by the target ECU.e.g. if the following sequence is
-                        needed in order to request a seed: Request 1 - 1003 (Diagnostic Session Control), Request 2 -
-                        1102 (ECUReset), Request 3 - 1005 (Diagnostic Session Control), Request 4 - 2705 (Security
-                        Access Seed Request). The option should be: 1003110210052705
+  stype                 Describe the session sequence followed by the target ECU.e.g. if the following sequence is needed in
+                        order to request a seed: Request 1 - 1003 (Diagnostic Session Control), Request 2 - 1102 (ECUReset),
+                        Request 3 - 1005 (Diagnostic Session Control), Request 4 - 2705 (Security Access Seed Request). The
+                        option should be: 1003110210052705
   src                   arbitration ID to transmit to
   dst                   arbitration ID to listen to
 
 optional arguments:
   -h, --help            show this help message and exit
   -t ITERATIONS, --iter ITERATIONS
-                        Number of iterations of seed requests. It is highly suggested to perform >=1000 for accurate
-                        results. (default: 1000)
+                        Number of iterations of seed requests. It is highly suggested to perform >=1000 for accurate results.
+                        (default: 1000)
   -r RTYPE, --reset RTYPE
-                        Enable reset between security seed requests. Valid RTYPE integers are: 1=hardReset, 2=key
-                        off/on, 3=softReset, 4=enable rapid power shutdown, 5=disable rapid power shutdown. This
-                        attack is based on hard ECUReset (1) as it targets seed randomness based on the system clock.
-                        (default: hardReset)
+                        Enable reset between security seed requests. Valid RTYPE integers are: 0=External Relay, 1=ECUReset
+                        hardReset, 2=ECUReset key off/on, 3=ECUReset softReset, 4=ECUReset enable rapid power shutdown,
+                        5=ECUReset disable rapid power shutdown. This attack is based on hard ECUReset (1) as it targets seed
+                        randomness based on the system clock. (default: hardReset)
   -id RTYPE, --inter_delay RTYPE
                         Intermediate delay between messages:(default: 0.1)
+  -g GPIO, --gpio GPIO  GPIO Pin option, used after -r 0 option, where reset type is set as an external physical
+                        relay. Default setup uses a Raspberry Pi to easily setup the GPIO pin of the relay.(default: 7)
   -m RMETHOD, --reset_method RMETHOD
-                        The method that the ECUReset will happen: 1=before each seed request 0=once before the seed
-                        requests start (default: 1) *This method works better with option 1.*
-  -d D, --delay D       Wait D seconds between reset and security seed request. You'll likely need to increase this
-                        when using RTYPE: 1=hardReset. Does nothing if RTYPE is None. (default: 3.901)
+                        The method that the ECUReset will happen: 1=before each seed request 0=once before the seed requests
+                        start (default: 1) *This method works better with option 1.*
+  -d D, --delay D       Wait D seconds between reset and security seed request. You'll likely need to increase this when
+                        using RTYPE: 1=hardReset. Does nothing if RTYPE is None. (default: 3.901)
+  -p P, --padding P     padding to be used in target messages (default: 0)
+  -np, --no_padding     trigger for cases where no padding is required, to enable set the option to 1. (default: 0)
 ```
 
 ## Delay Fuzzer
@@ -95,15 +100,15 @@ $ ccn.py uds_fuzz delay_fuzzer -h
 CARING CARIBOU NEXT v0.x
 -------------------------
 
-Loaded module 'uds_fuzz'
+Loading module 'uds_fuzz'
 
-usage: ccn.py uds_fuzz delay_fuzzer [-h] [-r RTYPE] [-d D] stype target src dst
+usage: ccn.py uds_fuzz delay_fuzzer [-h] [-r RTYPE] [-g GPIO] [-d D] [-p P] [-np] stype target src dst
 
 positional arguments:
-  stype                 Describe the session sequence followed by the target ECU.e.g. if the following sequence is
-                        needed in order to request a seed: Request 1 - 1003 (Diagnostic Session Control), Request 2 -
-                        1102 (ECUReset), Request 3 - 1005 (Diagnostic Session Control), Request 4 - 2705 (Security
-                        Access Seed Request). The option should be: 1003110210052705
+  stype                 Describe the session sequence followed by the target ECU.e.g. if the following sequence is needed in
+                        order to request a seed: Request 1 - 1003 (Diagnostic Session Control), Request 2 - 1102 (ECUReset),
+                        Request 3 - 1005 (Diagnostic Session Control), Request 4 - 2705 (Security Access Seed Request). The
+                        option should be: 1003110210052705
   target                Seed that is targeted for the delay attack. e.g. 41414141414141
   src                   arbitration ID to transmit to
   dst                   arbitration ID to listen to
@@ -111,10 +116,14 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -r RTYPE, --reset RTYPE
-                        Enable reset between security seed requests. Valid RTYPE integers are: 1=hardReset, 2=key
-                        off/on, 3=softReset, 4=enable rapid power shutdown, 5=disable rapid power shutdown. This
-                        attack is based on hard ECUReset (1) as it targets seed randomness based on the system clock.
-                        (default: hardReset)
-  -d D, --delay D       Wait D seconds between the different iterations of security seed request. You'll likely need
-                        to increase this when using RTYPE: 1=hardReset. (default: 0.011)
+                        Enable reset between security seed requests. Valid RTYPE integers are: 0=External Relay, 1=ECUReset
+                        hardReset, 2=ECUReset key off/on, 3=ECUReset softReset, 4=ECUReset enable rapid power shutdown,
+                        5=ECUReset disable rapid power shutdown. This attack is based on hard ECUReset (1) as it targets seed
+                        randomness based on the system clock. (default: hardReset)
+  -g GPIO, --gpio GPIO  GPIO Pin option, used after -r 0 option, where reset type is set as an external physical
+                        relay.Default setup uses a Raspberry Pi to easily setup the GPIO pin of the relay.(default: 7)
+  -d D, --delay D       Wait D seconds between the different iterations of security seed request. You'll likely need to
+                        increase this when using RTYPE: 1=hardReset. (default: 0.011)
+  -p P, --padding P     padding to be used in target messages (default: 0)
+  -np, --no_padding     trigger for cases where no padding is required, to enable set the option to 1. (default: 0)
 ```

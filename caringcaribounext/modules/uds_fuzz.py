@@ -331,8 +331,10 @@ def __parse_args(args):
                                                "the system clock. (default: hardReset)")
     parser_delay_fuzzer.add_argument("-g", "--gpio", metavar="GPIO", default=7,
                                      type=parse_int_dec_or_hex,
-                                     help="GPIO Pin in a Raspberry Pi configuration, which will be used in case of -r 0 option, where reset type is set as an external physical relay."
-                                        "(default: 7)")
+                                     help="GPIO Pin option, used after -r 0 option, "
+                                     "where reset type is set as an external physical relay. "
+                                     "Default setup uses a Raspberry Pi to easily setup the GPIO pin of the relay."
+                                      "(default: 7)")
     parser_delay_fuzzer.add_argument("-d", "--delay", metavar="D",
                                      type=float, default=DELAY_SECSEED_RESET,
                                      help="Wait D seconds between the different "
@@ -387,8 +389,10 @@ def __parse_args(args):
                                                "(default: 0.1)")
     parser_randomness_fuzzer.add_argument("-g", "--gpio", metavar="GPIO", default=7,
                                           type=parse_int_dec_or_hex,
-                                          help="GPIO Pin in a Raspberry Pi configuration, which will be used in case of -r 0 option, where reset type is set as an external physical relay."
-                                               "(default: 7)")
+                                          help="GPIO Pin option, used after -r 0 option, "
+                                          "where reset type is set as an external physical relay. "
+                                          "Default setup uses a Raspberry Pi to easily setup the GPIO pin of the relay."
+                                          "(default: 7)")
     parser_randomness_fuzzer.add_argument("-m", "--reset_method", metavar="RMETHOD", default=1,
                                           type=parse_int_dec_or_hex,
                                           help="The method that the ECUReset will happen: "
