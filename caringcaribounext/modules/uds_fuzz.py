@@ -94,6 +94,7 @@ def seed_randomness_fuzzer(arb_id_request, arb_id_response, reset_type, gpio, se
 
         if reset_type == 0:
             GPIO.setmode(GPIO.BOARD)
+            GPIO.setup(int(gpio), GPIO.OUT)
 
         # Issue first reset with the supplied delay time
         print("Security seed dump started. Press Ctrl+C if you need to stop.\n")
@@ -168,6 +169,7 @@ def delay_fuzzer(args):
     loop = True
     padding = args.padding
     no_padding = args.no_padding
+    gpio = args.gpio
 
     padding_set(padding, no_padding)
 
@@ -176,8 +178,12 @@ def delay_fuzzer(args):
         print("Security seed dump started. Press Ctrl+C to stop.\n")
         while loop:
 
+            if reset_type == 0:
+                GPIO.setmode(GPIO.BOARD)
+                GPIO.setup(int(gpio), GPIO.OUT)
+
             # Issue first reset with the supplied delay time
-            raw_send(arb_id_request, arb_id_response, ServiceID.ECU_RESET, reset_type)
+            reset(reset_type, gpio, arb_id_request, arb_id_response)
             time.sleep(reset_delay)
 
             # Loop through the length of the supplied input
@@ -226,7 +232,7 @@ def delay_fuzzer(args):
 
             # ECUReset and increase of delay in each loop
             if reset_type:
-                raw_send(arb_id_request, arb_id_response, ServiceID.ECU_RESET, reset_type)
+                reset(reset_type, gpio, arb_id_request, arb_id_response)
                 time.sleep(reset_delay)
                 reset_delay += 0.001
 
@@ -316,13 +322,17 @@ def __parse_args(args):
     parser_delay_fuzzer.add_argument("-r", "--reset", metavar="RTYPE", default=1,
                                      type=parse_int_dec_or_hex,
                                      help="Enable reset between security seed "
-                                          "requests. Valid RTYPE integers are: "
-                                          "1=hardReset, 2=key off/on, 3=softReset, "
-                                          "4=enable rapid power shutdown, "
-                                          "5=disable rapid power shutdown. "
-                                          "This attack is based on hard ECUReset (1) "
-                                          "as it targets seed randomness based on "
-                                          "the system clock. (default: hardReset)")
+                                               "requests. Valid RTYPE integers are: "
+                                               "0=External Relay, 1=ECUReset hardReset, 2=ECUReset key off/on, 3=ECUReset softReset, "
+                                               "4=ECUReset enable rapid power shutdown, "
+                                               "5=ECUReset disable rapid power shutdown. "
+                                               "This attack is based on hard ECUReset (1) "
+                                               "as it targets seed randomness based on "
+                                               "the system clock. (default: hardReset)")
+    parser_delay_fuzzer.add_argument("-g", "--gpio", metavar="GPIO", default=7,
+                                     type=parse_int_dec_or_hex,
+                                     help="GPIO Pin in a Raspberry Pi configuration, which will be used in case of -r 0 option, where reset type is set as an external physical relay."
+                                        "(default: 7)")
     parser_delay_fuzzer.add_argument("-d", "--delay", metavar="D",
                                      type=float, default=DELAY_SECSEED_RESET,
                                      help="Wait D seconds between the different "
