@@ -1,6 +1,7 @@
 from __future__ import print_function
 from caringcaribounext.utils.constants import ARBITRATION_ID_MAX, ARBITRATION_ID_MAX_EXTENDED, ARBITRATION_ID_MIN, BYTE_MAX, BYTE_MIN
 from sys import stdout, version_info
+import caringcaribounext.utils.constants as constants
 import can
 import time
 
@@ -18,6 +19,7 @@ NOTIFIER_STOP_DURATION = 0.5
 DEFAULT_INTERFACE = None
 DEFAULT_CHANNEL = None
 DEFAULT_BITRATE = None
+DEFAULT_FD = None
 
 
 def auto_blacklist(bus, duration, classifier_function, print_results):
@@ -111,9 +113,13 @@ class CanActions:
         self.clear_listeners()
         self.add_listener(listener)
 
-    def send(self, data, arb_id=None, is_extended=None, is_error=False, is_remote=False):
-        if len(data) > 8:
-            raise IndexError("Invalid CAN message length: {0}".format(len(data)))
+    def send(self, data, arb_id=None, is_extended=None, is_error=False, is_remote=False, is_fd=DEFAULT_FD):
+        if len(data) > constants.MAX_MESSAGE_LENGTH:
+            # Force CAN FD (Flexible Data-Rate) message if this is supported by the bus
+            if self.bus.protocol == can.bus.CanProtocol.CAN_FD:
+                is_fd = True
+            else:
+                raise IndexError("Invalid CAN message length: {0}".format(len(data)))
         # Fallback to default arbitration ID (self.arb_id) if no other ID is specified
         if arb_id is None:
             if self.arb_id is None:
@@ -126,7 +132,8 @@ class CanActions:
                           data=data,
                           is_extended_id=is_extended,
                           is_error_frame=is_error,
-                          is_remote_frame=is_remote)
+                          is_remote_frame=is_remote,
+                          is_fd=is_fd)
         self.bus.send(msg)
 
     def bruteforce_arbitration_id(self, data, callback, min_id, max_id,

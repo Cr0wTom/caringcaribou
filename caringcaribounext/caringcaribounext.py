@@ -84,6 +84,8 @@ def parse_arguments():
                         help="force channel, e.g. 'can1' or 'vcan0'")
     parser.add_argument("-b", dest="bitrate", default=None,
                         help="force bitrate, e.g. '250000' or '500000'")
+    parser.add_argument("-fd", dest="fd", default=0,
+                        help="CAN-FD support, 0 = False, 1 = True (default: 0)")
     parser.add_argument("-d", dest="dump", default='0',
                         help="generation of CAN dump file for further evaluation after each scan\n"
                         "Set to 1 to start dumping to file can_messages.log. (default: 0)\n")
@@ -123,6 +125,7 @@ def main():
         can_actions.DEFAULT_INTERFACE = args.interface
         can_actions.DEFAULT_CHANNEL = args.channel
         can_actions.DEFAULT_BITRATE = args.bitrate
+        can_actions.DEFAULT_FD = args.fd
         
         if args.dump == '1':
             # Create a list to store received CAN messages
