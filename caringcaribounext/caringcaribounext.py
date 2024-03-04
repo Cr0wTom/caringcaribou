@@ -157,6 +157,9 @@ if __name__ == '__main__':
         pass
     except can.CanError as e:
         print("\nCanError: {0}".format(e))
+    except can.CanInterfaceNotImplementedError as e:
+        print("An error occurred:", e)
+        print("\nPlease set the interface, channel and bitrate. Use --help for help.")
     except IOError as e:
         if e.errno is errno.ENODEV:
             # Specifically catch "[Errno 19] No such device", which is caused by using an invalid interface
