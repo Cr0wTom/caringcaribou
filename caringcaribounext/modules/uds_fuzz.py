@@ -5,7 +5,14 @@ from caringcaribounext.utils.iso15765_2 import IsoTp
 from sys import stdout
 import argparse
 import time
-import RPi.GPIO as GPIO
+import sys
+
+modulename = 'RPi.GPIO'
+if modulename not in sys.modules:
+    print('Module {} cannot be imported. Please use a RaspberryPi'.format(modulename))
+else:
+    import RPi.GPIO as GPIO
+
 
 # Number of seconds to wait between messages
 DELAY_SECSEED_RESET = 0.011

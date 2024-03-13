@@ -1347,7 +1347,6 @@ def dump_dids(arb_id_request, arb_id_response, timeout, reporting, diagnostic,
                 if print_results:
                     print("\nDone!")
                     print("\033[K", file=stderr) # clear line
-                    print("Done!")
                     report_print("\n")
                 return responses
             
